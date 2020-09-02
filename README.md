@@ -1,1 +1,1 @@
-# mongodb-react
+# mongodb-react minimal CRUD application
