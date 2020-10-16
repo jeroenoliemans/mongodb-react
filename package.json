@@ -10,6 +10,7 @@
     "@types/node": "^12.12.67",
     "@types/react": "^16.9.52",
     "@types/react-dom": "^16.9.8",
+    "express": "^4.17.1",
     "mongodb": "^2.2.36",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -18,7 +19,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:server": "node server/index.js",
+    "start:server": "node server/index.mjs",
+    "start:db": "node server/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
