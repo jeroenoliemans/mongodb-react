@@ -1,11 +1,11 @@
-const MongoClient = require('mongodb').MongoClient;
+import mongodb from 'mongodb';
 
 // mongodb connectionstring
 const connectionString = 'mongodb://localhost:27017/slogans';
 
 const connectDb = () => {
-    return mongoose.connect(process.env.DATABASE_URL);
-  };
+  return mongodb.MongoClient.connect(connectionString)
+};
    
 export { connectDb };
    

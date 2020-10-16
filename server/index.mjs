@@ -5,17 +5,17 @@
 // `sudo apt install mongodb-clients`
 // to acces mongodb enter `mongo`  and `db` at the prompt to see the exisiting databases
 
-// 
-// const express = require('express');
 import express from 'express';
+import {connectDb} from './db.mjs';
+
 const app = express();
 // server port
-const HTTP_PORT = 8044;
+const HTTP_PORT = 3000;
 // client port
 const CLIENT_HTTP_PORT = 3050;
 
 // body parser
-app.use(express.json);
+app.use(express.json());
 
 // set headers
 app.use(function(req, res, next) {
@@ -25,67 +25,48 @@ app.use(function(req, res, next) {
     next();
   });
 
-// start server
-app.listen(HTTP_PORT, () => {
-    console.log(`Example app listening at http://localhost:${HTTP_PORT}`)
-  })
-// Root endpoint
-app.get("/", (req, res, next) => {
-    res.json({"message":"Ok"});
-});
 
 //start mongo
+connectDb()
+.then(client => {
+  app.get("/", (req, res, next) => {
+    res.json({"message":"Ok"});
+  });
+
+  app.listen(HTTP_PORT, () => {
+    console.log(`Example app listening at http://localhost:${HTTP_PORT}`);
+  })
+
+  const db = client.db('slogans')
+
+  const slogansToStart = [
+      { id: '1', slogan: "Feed the Planet and It Will Nourish You."},
+      { id: '2', slogan: "Mother Earth Is Going to Get Mean If You Don't Go Green"}
+  ]; 
+
+  // reset collection
+  db.collection('slogans').drop();
+
+  db.collection('slogans').insertMany(slogansToStart)
+      .then(result => {
+          console.log(`inserted ${result.insertedIds.length} slogans!`);
+      })
+      .catch(err => console.error(`Failed to insert documents: ${err}`))
 
 
-// MongoClient.connect(connectionString)
-//     .then(client => {
-//         const db = client.db('slogans')
+  // get endpoint
+  app.get("/api/slogans", (req, res, next) => {
+      db.collection('slogans').find({}).toArray()
+          .then(items => {
+              res.json({
+                  "message":"success",
+                  "data": items
+              })
+          })
+          .catch(error => res.status(400).json({"error": error}));
+      });
 
-//         const slogansToStart = [
-//             { id: '1', slogan: "Feed the Planet and It Will Nourish You."},
-//             { id: '2', slogan: "Mother Earth Is Going to Get Mean If You Don't Go Green"}
-//         ]; 
-
-//         // reset collection
-//         // db.collection('slogans').drop();
-
-//         // db.collection('slogans').insertMany(slogansToStart)
-//         //     .then(result => {
-//         //         console.log(`inserted ${result.insertedIds.length} slogans!`);
-//         //     })
-//         //     .catch(err => console.error(`Failed to insert documents: ${err}`))
-
-//         // start server
-//         app.listen(HTTP_PORT, () => {
-//             console.log(`Example app listening at http://localhost:${HTTP_PORT}`)
-//         })
-
-//         // Default response for any other request
-//         // app.use(function(req, res){
-//         //     res.json({"status":"404"});
-//         // });
-
-//         // Root endpoint
-//         app.get("/", (req, res, next) => {
-//             res.json({"message":"Ok"});
-//         });
-
-//         // get endpoint
-//         // app.get("/api/slogans", (req, res, next) => {
-//         //     db.collection('slogans').find()
-//         //         .then(items => {
-//         //             res.json({
-//         //                 "message":"success",
-//         //                 "data": items
-//         //             })
-//         //         })
-//         //         .catch(error => res.status(400).json({"error": error}));
-//         //     });
-
-//         //db.close();
-//     })
-//     .catch(err => console.error(`Failed to connect to mongo: ${err}`));
-
+});
 
 
 
