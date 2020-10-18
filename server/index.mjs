@@ -12,7 +12,7 @@ import ObjectId from 'mongodb';
 
 const app = express();
 // server port
-const HTTP_PORT = 3000;
+const HTTP_PORT = 3030;
 // client port
 const CLIENT_HTTP_PORT = 3050;
 
