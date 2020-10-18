@@ -1,5 +1,6 @@
 // first create folder for Mongo db under root  `sudo mkdir -p /data/db`
 // set Owner sudo chown -R $USER /data
+// install mongo follow https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
 // start mongo `mongod` and keep terminal open
 // now install mongo client to interact with the db
 // `sudo apt install mongodb-clients`
@@ -7,6 +8,7 @@
 
 import express from 'express';
 import {connectDb} from './db.mjs';
+import ObjectId from 'mongodb';
 
 const app = express();
 // server port
@@ -65,6 +67,20 @@ connectDb()
           })
           .catch(error => res.status(400).json({"error": error}));
       });
+
+  // get on slogan
+  app.get("/api/slogan/:id", (req, res, next) => {
+    console.log(req.params.id);
+    db.collection('slogans').findOne({id: req.params.id})
+      .then(item => {
+          res.json({
+              "message":"success",
+              "data": item
+          })
+      })
+      .catch(error => res.status(400).json({"error": error}));
+  });
+
 
 });
 
