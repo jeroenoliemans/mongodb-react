@@ -1,9 +1,13 @@
-import React, {useState, useEffect}  from 'react';
+import React, {useState}  from 'react';
 
-const SloganForm = ({handleAddSlogan}) => {
+type SloganFormProps = { 
+    handleAddSlogan: any
+}
+
+const SloganForm = ({handleAddSlogan}: SloganFormProps) => {
     const [addSloganText, setAddSloganText] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e:any) => {
         e.preventDefault();
         if (!addSloganText.length) {
             return;

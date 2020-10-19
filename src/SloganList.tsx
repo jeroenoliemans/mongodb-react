@@ -9,15 +9,15 @@ interface Slogan
 
 type SloganListProps = {
     slogans: Slogan[], 
-    handleSlogansRemove,
-    handleSloganUpdate 
+    handleSlogansRemove: any,
+    handleSloganUpdate: any 
 }
 
 const SloganList = ({ 
     slogans, 
     handleSlogansRemove,
     handleSloganUpdate 
-}) => {
+}: SloganListProps) => {
     const listSlogansComponents = slogans.map((slogan, index) => 
             <Slogan 
                 handleSloganRemove={handleSlogansRemove}

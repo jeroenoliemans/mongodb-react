@@ -8,7 +8,7 @@ function get(url : string, type : string = 'GET', data?: any) {
         req.setRequestHeader("Content-type", "application/json");
         
         req.onload = () => {
-            if (req.status == 200) {
+            if (req.status === 200) {
                 resolve(req.response);
             } else {
                 reject(console.log(req.statusText));
@@ -23,7 +23,7 @@ function get(url : string, type : string = 'GET', data?: any) {
     });
 }
 
-const apiDomain = 'http://localhost:8044/';
+const apiDomain = 'http://localhost:3030/';
 
 const services = {
     getSlogans: () => {
