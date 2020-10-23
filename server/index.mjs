@@ -80,27 +80,68 @@ connectDb()
       .catch(error => res.status(400).json({"error": error}));
   });
 
-  // add slogan
+  // add slogan I created this totally with asyn functions
   app.post("/api/slogan/", (req, res, next) => {
-    let errors=[]
     if (!req.body.slogan) {
         res.status(400).json({"error": "No slogan specified"});
         return;
     }
-    db.collection('slogans').find({}).count()
-      .then(collectionCount => {
-        db.collection('slogans').insertOne({id: (collectionCount + 1), slogan: req.body.slogan})
-          .then(item => {
-              res.json({
-                  "message":"success",
-                  "data": item
-              })
-          })
-          .catch(error => res.status(400).json({"error": error}));
+
+    try {
+      let item = insertOne(db, 'slogans', req.body.slogan);
+      return res.json({
+        "message":"success",
+        "data": item
+      });
+    } catch (error) {
+      res.status(400).json({"error": error})
+    }
+  });
+
+
+  //update slogan
+  app.put("/api/slogan/:id", (req, res, next) => {
+    if (!req.body.slogan) {
+        res.status(400).json({"error": "No slogan specified"});
+        return;
+    }
+
+    const idToUpdate = (req.params.id)*1;
+
+    db.collection('slogans').updateOne(
+      {"id": idToUpdate}, 
+      {$set: {"id": idToUpdate, "slogan": req.body.slogan}}
+    )
+      .then(item => {
+        res.json({
+            "message":"success",
+            "data": item
+        })
       })
       .catch(error => res.status(400).json({"error": error}));
-  });
+  })
+
+  // delete slogan
+  app.delete("/api/slogan/:id", (req, res, next) => {
+    const idToUpdate = (req.params.id)*1;
+
+    db.collection('slogans').deleteOne({"id": idToUpdate})
+      .then(item => {
+        res.json({
+            "message":"success",
+            "data": item
+        })
+      })
+      .catch(error => res.status(400).json({"error": error}));
+  })
+
 });
 
 
+// async functions more easy to open/close for every operation if needed
+async function insertOne(db, collection, slogan){
+  let collectionCount = await db.collection(collection).find({}).count()
 
+  let result = await db.collection(collection).insertOne({id: (collectionCount + 1), slogan: slogan});
+  return result;
+}
