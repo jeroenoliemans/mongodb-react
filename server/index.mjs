@@ -42,8 +42,8 @@ connectDb()
   const db = client.db('slogans')
 
   const slogansToStart = [
-      { id: '1', slogan: "Feed the Planet and It Will Nourish You."},
-      { id: '2', slogan: "Mother Earth Is Going to Get Mean If You Don't Go Green"}
+      { id: 1, slogan: "Feed the Planet and It Will Nourish You."},
+      { id: 2, slogan: "Mother Earth Is Going to Get Mean If You Don't Go Green"}
   ]; 
 
   // reset collection
@@ -70,7 +70,6 @@ connectDb()
 
   // get on slogan
   app.get("/api/slogan/:id", (req, res, next) => {
-    console.log(req.params.id);
     db.collection('slogans').findOne({id: req.params.id})
       .then(item => {
           res.json({
@@ -81,7 +80,26 @@ connectDb()
       .catch(error => res.status(400).json({"error": error}));
   });
 
-
+  // add slogan
+  app.post("/api/slogan/", (req, res, next) => {
+    let errors=[]
+    if (!req.body.slogan) {
+        res.status(400).json({"error": "No slogan specified"});
+        return;
+    }
+    db.collection('slogans').find({}).count()
+      .then(collectionCount => {
+        db.collection('slogans').insertOne({id: (collectionCount + 1), slogan: req.body.slogan})
+          .then(item => {
+              res.json({
+                  "message":"success",
+                  "data": item
+              })
+          })
+          .catch(error => res.status(400).json({"error": error}));
+      })
+      .catch(error => res.status(400).json({"error": error}));
+  });
 });
 
 

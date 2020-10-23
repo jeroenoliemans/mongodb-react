@@ -36,8 +36,12 @@ const Slogan = ({
                         value={sloganText}
                     />
                     <div className="SloganButtons">
-                        <button title="save slogan" onClick={() => saveSlogan(dbId)}>⇅</button>
-                        <button title="cancel" onClick={() => {setEdit(false)}}>↶</button>
+                        <button title="save slogan" onClick={() => saveSlogan(dbId)}>
+                            <span arial-label="update" role="img">⇅</span>
+                        </button>
+                        <button title="cancel" onClick={() => {setEdit(false)}}>
+                            <span arial-label="cancel" role="img">↶</span>
+                        </button>
                     </div>
                 </div>
             ) : (
@@ -45,7 +49,9 @@ const Slogan = ({
                     <p>{sloganText}</p>
                     <div className="SloganButtons">
                         <button title="edit slogan" onClick={(e: MouseEvent) => {setEdit(true)}}>✎</button>
-                        <button title="remove slogan" onClick={() => handleRemove(dbId)}>❌</button>
+                        <button title="remove slogan" onClick={() => handleRemove(dbId)}>
+                            <span arial-label="remove" role="img">❌</span>
+                        </button>
                     </div>
                 </div>
             )}     
