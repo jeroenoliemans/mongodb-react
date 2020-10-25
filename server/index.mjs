@@ -7,14 +7,12 @@
 // to acces mongodb enter `mongo`  and `db` at the prompt to see the exisiting databases
 
 import express from 'express';
-import {connectDb} from './db.mjs';
+import {connectDb, prepareDb} from './db.mjs';
 import ObjectId from 'mongodb';
 
 const app = express();
 // server port
 const HTTP_PORT = 3030;
-// client port
-const CLIENT_HTTP_PORT = 3050;
 
 // body parser
 app.use(express.json());
@@ -27,7 +25,6 @@ app.use(function(req, res, next) {
     next();
   });
 
-
 //start mongo
 connectDb()
 .then(client => {
@@ -39,22 +36,9 @@ connectDb()
     console.log(`Example app listening at http://localhost:${HTTP_PORT}`);
   })
 
-  const db = client.db('slogans')
-
-  const slogansToStart = [
-      { id: 1, slogan: "Feed the Planet and It Will Nourish You."},
-      { id: 2, slogan: "Mother Earth Is Going to Get Mean If You Don't Go Green"}
-  ]; 
-
-  // reset collection
-  db.collection('slogans').drop();
-
-  db.collection('slogans').insertMany(slogansToStart)
-      .then(result => {
-          console.log(`inserted ${result.insertedIds.length} slogans!`);
-      })
-      .catch(err => console.error(`Failed to insert documents: ${err}`))
-
+  // connect and prepare mongodb
+  const db = client.db('slogans');
+  prepareDb(db);
 
   // get endpoint
   app.get("/api/slogans", (req, res, next) => {
@@ -88,16 +72,16 @@ connectDb()
     }
 
     try {
-      let item = insertOne(db, 'slogans', req.body.slogan);
+      let insertedItem = insertOne(db, 'slogans', req.body.slogan);
+
       return res.json({
         "message":"success",
-        "data": item
+        "data": insertedItem
       });
     } catch (error) {
       res.status(400).json({"error": error})
     }
   });
-
 
   //update slogan
   app.put("/api/slogan/:id", (req, res, next) => {
@@ -134,14 +118,19 @@ connectDb()
       })
       .catch(error => res.status(400).json({"error": error}));
   })
-
 });
 
-
-// async functions more easy to open/close for every operation if needed
-async function insertOne(db, collection, slogan){
+// async functions more to use when multiple async ops are required
+const insertOne = async (db, collection, slogan) => {
   let collectionCount = await db.collection(collection).find({}).count()
-
-  let result = await db.collection(collection).insertOne({id: (collectionCount + 1), slogan: slogan});
-  return result;
+  return await db.collection(collection).insertOne({id: (collectionCount + 1), slogan: slogan});
 }
+
+// kill the connection when the server stops
+process.on('SIGINT', function() {
+  db.close()
+    .then(() => {
+      console.log('Mongoose disconnected on app termination');
+      process.exit(0);
+    })
+});
