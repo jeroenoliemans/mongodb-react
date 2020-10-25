@@ -1,14 +1,5 @@
-// first create folder for Mongo db under root  `sudo mkdir -p /data/db`
-// set Owner sudo chown -R $USER /data
-// install mongo follow https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
-// start mongo `mongod` and keep terminal open
-// now install mongo client to interact with the db
-// `sudo apt install mongodb-clients`
-// to acces mongodb enter `mongo`  and `db` at the prompt to see the exisiting databases
-
 import express from 'express';
 import {connectDb, prepareDb} from './db.mjs';
-import ObjectId from 'mongodb';
 
 const app = express();
 // server port
@@ -64,7 +55,7 @@ connectDb()
       .catch(error => res.status(400).json({"error": error}));
   });
 
-  // add slogan I created this totally with asyn functions
+  // add slogan I created this with asyn functions
   app.post("/api/slogan/", (req, res, next) => {
     if (!req.body.slogan) {
         res.status(400).json({"error": "No slogan specified"});

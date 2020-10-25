@@ -9,8 +9,8 @@ interface Slogan
 
 type SloganListProps = {
     slogans: Slogan[], 
-    handleSlogansRemove: any,
-    handleSloganUpdate: any 
+    handleSlogansRemove: (handleSlogansRemove:number) => void,
+    handleSloganUpdate: (handleSloganUpdate:number, newSloganText:string) => void 
 }
 
 const SloganList = ({ 
