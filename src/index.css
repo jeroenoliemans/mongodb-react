@@ -1,13 +1,89 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body {
+  background-color: rgb(181, 218, 197);
+  text-align: center;
+
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  width: 80vw;
+  margin: 0 10vw;
+}
+
+h1 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.3rem;
+  border-bottom: 5px solid black;
+  padding: 1rem;
+  margin-bottom: 0;
+}
+
+.AppForm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid black;
+  background-color: rgb(163, 202, 180);
+  padding: 1rem; 
+}
+
+label {
+  font-weight: bold;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+p {
+  text-align: left;
+  margin: 1rem 0;
+}
+
+input {
+  height: 20px;
+  flex: 1 1 auto;
+  margin: 0 5%;
+}
+
+.Slogan{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-bottom: 1px solid black;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.SloganInput {
+  margin: 1rem 0;
+  height: 21px;
+}
+
+.SloganButtons {
+  display: flex;
+}
+
+button {
+  border: none;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 0.5rem
+}
+
+@media only screen and (min-width : 768px) {
+  .App {
+      width: 60vw;
+      margin: 0 20vw;
+  }
+
+  .AppForm {
+      padding: 1rem 3rem; 
+  }
 }

@@ -1,26 +1,70 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import services  from './services';
+import SloganList from './SloganList';
+import SloganForm from './SloganForm';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const [slogans, setSlogans] = useState<any>([]);
+
+    const getSlogans = () => {
+        services.getSlogans()
+        .then((response: any) => {
+            let responseObject = JSON.parse(response);
+            setSlogans(responseObject.data);   
+        }, (error: any) => {
+            console.log(error)
+        });
+    }
+    
+    const addSlogan = (sloganText: string) => {
+        services.addSlogan(sloganText)
+        .then((response: any) => {
+            console.log(response);
+            getSlogans();
+        }, (error: any) => {
+            console.log(error)
+        });
+    };
+
+    const removeSlogan = (dbId: number) => {
+        console.log(dbId)
+        services.deleteSlogan(dbId)
+        .then((response: any) => {
+            console.log(response);
+            getSlogans();
+        }, (error: any) => {
+            console.log(error)
+        });
+    }
+
+    const saveSlogan = (dbId: number, newSloganText: string) => {
+        console.log(dbId, newSloganText);
+        services.updateSlogan(dbId, newSloganText)
+        .then((response: any) => {
+            console.log('update done')
+            console.log(response);
+            getSlogans();
+        }, (error: any) => {
+            console.log(error)
+        });
+    }
+
+    useEffect(() => {
+        getSlogans();
+    }, []);
+
+    return (
+        <React.Fragment>
+            <header className="AppHeader">
+                <h1>Slogans</h1>
+                <SloganForm handleAddSlogan={addSlogan} />
+            </header>
+            <SloganList 
+                handleSlogansRemove={removeSlogan}
+                handleSloganUpdate={saveSlogan} 
+                slogans={slogans} />
+        </React.Fragment>
+    );
 }
-
+  
 export default App;
