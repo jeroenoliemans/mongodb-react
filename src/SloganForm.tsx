@@ -1,7 +1,7 @@
 import React, {useState}  from 'react';
 
 type SloganFormProps = { 
-    handleAddSlogan: any
+    handleAddSlogan: (addSloganText:string) => void
 }
 
 const SloganForm = ({handleAddSlogan}: SloganFormProps) => {

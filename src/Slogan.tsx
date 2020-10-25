@@ -3,8 +3,8 @@ import React, {useState, MouseEvent} from 'react';
 type SloganProps = {
     slogan: string, 
     dbId: number, 
-    handleSloganRemove: any, 
-    handleSaveSlogan: any
+    handleSloganRemove: (dbId:number) => void, 
+    handleSaveSlogan: (dbId:number, sloganText:string) => void
 }
 
 const Slogan = ({ 
@@ -37,7 +37,7 @@ const Slogan = ({
                     />
                     <div className="SloganButtons">
                         <button title="save slogan" onClick={() => saveSlogan(dbId)}>
-                            <span arial-label="update" role="img">⇅</span>
+                            <span arial-label="update" aria-labelledby="" role="img">⇅</span>
                         </button>
                         <button title="cancel" onClick={() => {setEdit(false)}}>
                             <span arial-label="cancel" role="img">↶</span>
